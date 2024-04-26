@@ -25,9 +25,11 @@ source "$(get_curr_dir)"/../configuration.sh
 
 export SRUN_CPUS_PER_TASK="$SLURM_CPUS_PER_TASK"
 
-export INPUT_DATA_FILE="$root_scratch_dir"/"$project_name"/example-data/tiny-c4-100k.jsonl
-export TOKENIZER_DIR="$root_scratch_dir"/"$project_name"/example-data/gpt2-tokenizer
-export OUTPUT_DATA_DIR="$data_dir"/my-tiny-c4-gpt2-tok/train
+export SPLIT=train
+export TOKENIZER_DIR=gpt2
+export CONCAT_TOKENS=1024
+export INPUT_DATA_FILE=/p/home/jusers/filatov1/juwels/trustllm-s/datasets/c4/en/
+export OUTPUT_DATA_DIR="$data_dir"/c4-en-tokenizer-"$TOKENIZER_DIR"-concat-"$CONCAT_TOKENS"/"$SPLIT"
 
 # We assign to a variable again so Bash can do the quoted
 # interpolation.
