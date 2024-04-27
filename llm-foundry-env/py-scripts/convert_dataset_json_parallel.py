@@ -101,7 +101,7 @@ def build_hf_dataset(
         An IterableDataset.
     """
     if os.path.isdir(path):
-        data_files = {split: glob(f'{path}/*{split}*')}
+        data_files = glob(f'{path}/*')
     else:
         data_files = path
 

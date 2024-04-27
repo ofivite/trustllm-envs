@@ -2,7 +2,7 @@
 
 # Preprocess data in parallel on JUWELS Cluster.
 
-#SBATCH --nodes=1
+#SBATCH --nodes=2
 #SBATCH --ntasks-per-node=48  # 1 task per core.
 #SBATCH --cpus-per-task=1  # 48 physical cores per node.
 #SBATCH --hint=nomultithread  # Use only physical CPU cores.
@@ -11,7 +11,7 @@
 # Use `devel` for debugging, `batch` for "normal" jobs, `mem192` for
 # nodes with higher memory, and `large` for jobs on more than 256
 # nodes.
-#SBATCH --partition=devel
+#SBATCH --partition=batch
 
 set -euo pipefail
 
@@ -28,8 +28,8 @@ export SRUN_CPUS_PER_TASK="$SLURM_CPUS_PER_TASK"
 export SPLIT=train
 export TOKENIZER_DIR=gpt2
 export CONCAT_TOKENS=1024
-export INPUT_DATA_FILE=/p/home/jusers/filatov1/juwels/trustllm-s/datasets/c4/en/
-export OUTPUT_DATA_DIR="$data_dir"/c4-en-tokenizer-"$TOKENIZER_DIR"-concat-"$CONCAT_TOKENS"/"$SPLIT"
+export INPUT_DATA_FILE="/p/scratch/trustllm-eu/filatov1/datasets/c4/en/c4-${SPLIT}.000*"
+export OUTPUT_DATA_DIR="$data_dir"/c4-en-tokenizer-"$TOKENIZER_DIR"-concat-"$CONCAT_TOKENS"/"$SPLIT"-0
 
 # We assign to a variable again so Bash can do the quoted
 # interpolation.
@@ -41,11 +41,13 @@ srun bash -c "
         bash ${parallel_preprocessing_script@Q}
 "
 
-# Probably safer to do this as an interactive run so we don't run into
-# time limit problems, since it is a destructive operation. However,
-# for convenience, this is included here for now.
-bash "$(get_curr_dir)"/../container_run.sh \
-     python -u "$(get_curr_dir)"/../py-scripts/merge_dataset.py \
-         --out_root "$OUTPUT_DATA_DIR"
+# # Probably safer to do this as an interactive run so we don't run into
+# # time limit problems, since it is a destructive operation. However,
+# # for convenience, this is included here for now.
+# bash "$(get_curr_dir)"/../container_run.sh \
+#      python -u "$(get_curr_dir)"/../py-scripts/merge_dataset.py \
+#          --out_root "$OUTPUT_DATA_DIR"
+
+# echo "Merged dataset saved to $OUTPUT_DATA_DIR"
 
 pop_curr_file
