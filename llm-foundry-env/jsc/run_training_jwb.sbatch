@@ -5,13 +5,16 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=48  # 48 physical cores per node.
+# SBATCH --cpus-per-task=40
 #SBATCH --hint=nomultithread  # Use only physical CPU cores.
 #SBATCH --gres=gpu:4
-#SBATCH --time=00:20:00
-#SBATCH --account=trustllm-eu
-# Use `develbooster` for debugging, `booster` for "normal" jobs, and
-# `largebooster` for jobs on more than 256 nodes.
-#SBATCH --partition=develbooster
+#SBATCH --time 00:20:00
+#SBATCH --account=atmlaml
+# booster / develbooster 
+# dc-gpu / dc-gpu-devel
+# gpus / develgpus
+#SBATCH --partition=dc-gpu-devel
+#SBATCH --array=0
 
 set -euo pipefail
 
@@ -42,10 +45,64 @@ export DEVICES_PER_NODE=4
 export TRAIN_NUM_WORKERS=8
 export EVAL_NUM_WORKERS=3
 
-export TRAIN_CONFIG_YAML_FILE=train/yamls/pretrain/mpt-125m.yaml
-export INPUT_DATA_ROOT_DIR="$data_dir"/my-tiny-c4-gpt2-tok
-export TOKENIZER_DIR="$root_scratch_dir"/"$project_name"/example-data/gpt2-tokenizer
-export MODEL_CHECKPOINT_DIR="$checkpoint_dir"/mpt-125m
+# NCCL timeout 
+export NCCL_IB_TIMEOUT=500
+export UCX_RC_TIMEOUT=40s
+export NCCL_IB_RETRY_CNT=100
+
+export UCX_DC_MLX5_FC_ENABLE=y
+export UCX_DC_MLX5_TIMEOUT=10000000.00us
+export UCX_DC_MLX5_RNR_TIMEOUT=10000.00us
+export UCX_RC_MLX5_FC_ENABLE=y
+export UCX_RC_MLX5_TIMEOUT=10000000.00us
+export UCX_RC_MLX5_RNR_TIMEOUT=10000.00us
+export UCX_UD_MLX5_FC_ENABLE=y
+export UCX_UD_MLX5_TIMEOUT=10000000.00us
+export UCX_UD_MLX5_RNR_TIMEOUT=10000.00us
+
+# random seed
+export GLOBAL_SEED=5120
+
+export TRAIN_CONFIG_YAML_FILE=train/yamls/pretrain/mpt-350m.yaml
+export INPUT_DATA_ROOT_DIR="$data_dir"/c4-en-tokenizer-gpt2-concat-1024
+
+# model
+export N_LAYERS=24
+export D_MODEL=1024
+export D_MODEL_BASE=1024
+export D_HEAD=128
+export N_HEADS="$((D_MODEL / D_HEAD))"
+export N_HEADS_BASE="$((D_MODEL_BASE / D_HEAD))"
+
+# machine dependent (juwels/jureca)
+export PRECISION="amp_bf16" # amp_bf16 / amp_fp16
+export MICRO_BS=16 # max for baseline: 16 (JURECA)
+export EVAL_MICRO_BS="$((2 * MICRO_BS))" # 16 is max for 4 layers, 10240 width
+
+# experiment
+export EXPERIMENT_NAME="warmup-linear" # warmup-constant / warmup-linear
+
+# schedule
+export SCHEDULER_NAME="linear_decay_with_warmup"  # linear_decay_with_warmup / constant_with_warmup
+export GLOBAL_BS=1024
+export WARMUP="512ba" # "10_000_000tok" / "100ba"
+export MAX_DURATION="16384ba"
+
+# eval / checkpointing intervals
+export EVAL_INTERVAL="512ba" #"70000ba"
+export SAVE_INTERVAL="4096ba" # "512ba"
+export SAVE_OVERWRITE=true # true / false
+export SAVE_NUM_CHECKPOINTS_TO_KEEP=1 # -1 / 1
+
+export SAVE_FOLDER="$checkpoint_dir"/"$EXPERIMENT_NAME"/{run_name}/checkpoints
+export LOAD_PATH=
+
+# export CHECKPOINT_RUN_NAME=lr-5-std-1.0-warmup-512ba-dur-15872ba-job-12771409
+# export SAVE_FOLDER="$checkpoint_dir"/"$EXPERIMENT_NAME"/"$CHECKPOINT_RUN_NAME"/checkpoints
+# export LOAD_PATH="$checkpoint_dir"/"$EXPERIMENT_NAME"/"$CHECKPOINT_RUN_NAME"/checkpoints/latest-rank0.pt
+
+export MLFLOW_EXP_NAME=${EXPERIMENT_NAME}
+export MLFLOW_RUN_NAME=
 
 # We assign to a variable again so Bash can do the quoted
 # interpolation.

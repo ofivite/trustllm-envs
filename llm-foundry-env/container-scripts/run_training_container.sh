@@ -41,15 +41,32 @@ python -u -m composer \
     train/train.py \
     "$TRAIN_CONFIG_YAML_FILE" \
     data_local="$INPUT_DATA_ROOT_DIR" \
-    tokenizer.name="$TOKENIZER_DIR" \
     train_loader.num_workers="$TRAIN_NUM_WORKERS" \
     train_loader.dataset.split=train \
     eval_loader.num_workers="$EVAL_NUM_WORKERS" \
-    eval_loader.dataset.split=val \
-    model.attn_config.attn_impl=flash \
-    max_duration=10ba \
-    eval_interval=0 \
-    save_folder="$MODEL_CHECKPOINT_DIR"
+    eval_loader.dataset.split=validation \
+    global_train_batch_size="$GLOBAL_BS" \
+    device_train_microbatch_size="$MICRO_BS" \
+    device_eval_batch_size="$EVAL_MICRO_BS" \
+    model.d_model="$D_MODEL" \
+    model.n_layers="$N_LAYERS" \
+    model.n_heads="$N_HEADS" \
+    model._mup_config.d_model_base="$D_MODEL_BASE" \
+    model._mup_config.n_heads_base="$N_HEADS_BASE" \
+    experiment_name="$EXPERIMENT_NAME" \
+    global_seed="$GLOBAL_SEED" \
+    precision="$PRECISION" \
+    max_duration="$MAX_DURATION" \
+    scheduler.name="$SCHEDULER_NAME" \
+    scheduler.t_warmup="$WARMUP" \
+    load_path="$LOAD_PATH" \
+    save_folder="$SAVE_FOLDER" \
+    save_interval="$SAVE_INTERVAL" \
+    save_overwrite="$SAVE_OVERWRITE" \
+    save_num_checkpoints_to_keep="$SAVE_NUM_CHECKPOINTS_TO_KEEP" \
+    eval_interval="$EVAL_INTERVAL" \
+    loggers.mlflow.experiment_name="$MLFLOW_EXP_NAME" \
+    loggers.mlflow.run_name="$MLFLOW_RUN_NAME"
 
 # # Convert the model to HuggingFace format
 # python inference/convert_composer_to_hf.py \
