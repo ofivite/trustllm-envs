@@ -54,6 +54,7 @@ python -u -m composer \
     model._mup_config.d_model_base="$D_MODEL_BASE" \
     model._mup_config.n_heads_base="$N_HEADS_BASE" \
     experiment_name="$EXPERIMENT_NAME" \
+    run_name="$RUN_NAME" \
     global_seed="$GLOBAL_SEED" \
     precision="$PRECISION" \
     max_duration="$MAX_DURATION" \
@@ -65,8 +66,10 @@ python -u -m composer \
     save_overwrite="$SAVE_OVERWRITE" \
     save_num_checkpoints_to_keep="$SAVE_NUM_CHECKPOINTS_TO_KEEP" \
     eval_interval="$EVAL_INTERVAL" \
-    loggers.mlflow.experiment_name="$MLFLOW_EXP_NAME" \
-    loggers.mlflow.run_name="$MLFLOW_RUN_NAME"
+    loggers.wandb.entity="$WANDB_ENTITY" \
+    loggers.wandb.project="$WANDB_PROJECT"
+
+    # scheduler.alpha_f="$ALPHA_F" \
 
 # # Convert the model to HuggingFace format
 # python inference/convert_composer_to_hf.py \

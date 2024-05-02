@@ -61,7 +61,7 @@ export UCX_UD_MLX5_TIMEOUT=10000000.00us
 export UCX_UD_MLX5_RNR_TIMEOUT=10000.00us
 
 # random seed
-export GLOBAL_SEED=5120
+export GLOBAL_SEED=5120 # 5120 (baseline) / 8 (1) / 3 (2)
 
 export TRAIN_CONFIG_YAML_FILE=train/yamls/pretrain/mpt-350m.yaml
 export INPUT_DATA_ROOT_DIR="$data_dir"/c4-en-tokenizer-gpt2-concat-1024
@@ -79,30 +79,28 @@ export PRECISION="amp_bf16" # amp_bf16 / amp_fp16
 export MICRO_BS=16 # max for baseline: 16 (JURECA)
 export EVAL_MICRO_BS="$((2 * MICRO_BS))" # 16 is max for 4 layers, 10240 width
 
-# experiment
-export EXPERIMENT_NAME="warmup-linear" # warmup-constant / warmup-linear
-
 # schedule
-export SCHEDULER_NAME="linear_decay_with_warmup"  # linear_decay_with_warmup / constant_with_warmup
+export SCHEDULER_NAME="constant_with_warmup"  # linear_decay_with_warmup / constant_with_warmup / cosine_with_warmup
 export GLOBAL_BS=1024
 export WARMUP="512ba" # "10_000_000tok" / "100ba"
 export MAX_DURATION="16384ba"
+# export ALPHA_F=0.1
 
 # eval / checkpointing intervals
-export EVAL_INTERVAL="512ba" #"70000ba"
-export SAVE_INTERVAL="4096ba" # "512ba"
-export SAVE_OVERWRITE=true # true / false
-export SAVE_NUM_CHECKPOINTS_TO_KEEP=1 # -1 / 1
+export EVAL_INTERVAL="512ba" # "512ba"
+export SAVE_INTERVAL="512ba" # "512ba"
+export SAVE_OVERWRITE=false # true / false
+export SAVE_NUM_CHECKPOINTS_TO_KEEP=-1 # -1 / 1
 
-export SAVE_FOLDER="$checkpoint_dir"/"$EXPERIMENT_NAME"/{run_name}/checkpoints
-export LOAD_PATH=
+# experiment
+export EXPERIMENT_NAME=warmup-constant # warmup-constant / warmup-linear / warmup-cosine
+export RUN_NAME=lr-"$SLURM_ARRAY_TASK_ID"-bs-"$GLOBAL_BS"-warmup-"$WARMUP"-dur-"$MAX_DURATION" # -job-"$SLURM_JOB_ID"
 
-# export CHECKPOINT_RUN_NAME=lr-5-std-1.0-warmup-512ba-dur-15872ba-job-12771409
-# export SAVE_FOLDER="$checkpoint_dir"/"$EXPERIMENT_NAME"/"$CHECKPOINT_RUN_NAME"/checkpoints
+export SAVE_FOLDER="$checkpoint_dir"/"$EXPERIMENT_NAME"/"$RUN_NAME"/checkpoints
+export LOAD_PATH="$SAVE_FOLDER"/latest-rank0.pt
+
+# export CHECKPOINT_RUN_NAME=???
 # export LOAD_PATH="$checkpoint_dir"/"$EXPERIMENT_NAME"/"$CHECKPOINT_RUN_NAME"/checkpoints/latest-rank0.pt
-
-export MLFLOW_EXP_NAME=${EXPERIMENT_NAME}
-export MLFLOW_RUN_NAME=
 
 # We assign to a variable again so Bash can do the quoted
 # interpolation.
