@@ -95,12 +95,10 @@ export SAVE_NUM_CHECKPOINTS_TO_KEEP=-1 # -1 / 1
 # experiment
 export EXPERIMENT_NAME=warmup-constant # warmup-constant / warmup-linear / warmup-cosine
 export RUN_NAME=lr-"$SLURM_ARRAY_TASK_ID"-bs-"$GLOBAL_BS"-warmup-"$WARMUP"-dur-"$MAX_DURATION" # -job-"$SLURM_JOB_ID"
-
 export SAVE_FOLDER="$checkpoint_dir"/"$EXPERIMENT_NAME"/"$RUN_NAME"/checkpoints
-export LOAD_PATH="$SAVE_FOLDER"/latest-rank0.pt
 
-# export CHECKPOINT_RUN_NAME=???
-# export LOAD_PATH="$checkpoint_dir"/"$EXPERIMENT_NAME"/"$CHECKPOINT_RUN_NAME"/checkpoints/latest-rank0.pt
+export LOAD_PATH=
+# export LOAD_PATH="$SAVE_FOLDER"/latest-rank0.pt
 
 # We assign to a variable again so Bash can do the quoted
 # interpolation.
