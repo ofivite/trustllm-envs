@@ -84,6 +84,7 @@ export SCHEDULER_NAME="constant_with_warmup"  # linear_decay_with_warmup / const
 export GLOBAL_BS=1024
 export WARMUP="512ba" # "10_000_000tok" / "100ba"
 export MAX_DURATION="16384ba"
+export RESET_TIME=false
 # export ALPHA_F=0.1
 
 # eval / checkpointing intervals

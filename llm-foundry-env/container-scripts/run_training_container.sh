@@ -58,6 +58,7 @@ python -u -m composer \
     global_seed="$GLOBAL_SEED" \
     precision="$PRECISION" \
     max_duration="$MAX_DURATION" \
+    reset_time="$RESET_TIME" \
     scheduler.name="$SCHEDULER_NAME" \
     scheduler.t_warmup="$WARMUP" \
     load_path="$LOAD_PATH" \
