@@ -83,9 +83,16 @@ export EVAL_MICRO_BS="$((2 * MICRO_BS))" # 16 is max for 4 layers, 10240 width
 export SCHEDULER_NAME="constant_with_warmup"  # linear_decay_with_warmup / constant_with_warmup / cosine_with_warmup
 export GLOBAL_BS=1024
 export WARMUP="512ba" # "10_000_000tok" / "100ba"
-export MAX_DURATION="16384ba"
-export RESET_TIME=false
 # export ALPHA_F=0.1
+
+export MAX_DURATION="8192ba"
+export RESET_TIME=false
+
+# _TARGET_HORIZON=16384
+# _DECAY_TIME=8192
+# _CHECKPOINT_TIME=$(($_TARGET_HORIZON - $_DECAY_TIME))
+# export MAX_DURATION="${_DECAY_TIME}ba"
+# export RESET_TIME=true
 
 # eval / checkpointing intervals
 export EVAL_INTERVAL="512ba" # "512ba"
@@ -100,6 +107,7 @@ export SAVE_FOLDER="$checkpoint_dir"/"$EXPERIMENT_NAME"/"$RUN_NAME"/checkpoints
 
 export LOAD_PATH=
 # export LOAD_PATH="$SAVE_FOLDER"/latest-rank0.pt
+# export LOAD_PATH="$checkpoint_dir"/warmup-constant/lr-"$SLURM_ARRAY_TASK_ID"-bs-1024-warmup-512ba-dur-32768ba/checkpoints/ep0-ba"$_CHECKPOINT_TIME"-rank0.pt # latest-rank0.pt
 
 # We assign to a variable again so Bash can do the quoted
 # interpolation.
