@@ -73,6 +73,7 @@ export D_MODEL_BASE=1024
 export D_HEAD=128
 export N_HEADS="$((D_MODEL / D_HEAD))"
 export N_HEADS_BASE="$((D_MODEL_BASE / D_HEAD))"
+export WEIGHT_DECAY=0.0
 
 # machine dependent (juwels/jureca)
 export PRECISION="amp_bf16" # amp_bf16 / amp_fp16

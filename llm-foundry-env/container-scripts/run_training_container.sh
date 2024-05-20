@@ -59,6 +59,7 @@ python -u -m composer \
     precision="$PRECISION" \
     max_duration="$MAX_DURATION" \
     reset_time="$RESET_TIME" \
+    optimizer.weight_decay="$WEIGHT_DECAY" \
     scheduler.name="$SCHEDULER_NAME" \
     scheduler.t_warmup="$WARMUP" \
     load_path="$LOAD_PATH" \
