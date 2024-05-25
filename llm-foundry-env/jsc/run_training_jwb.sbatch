@@ -81,6 +81,7 @@ export WEIGHT_DECAY=0.0 # 0.00001
 export PRECISION="amp_bf16" # amp_bf16 / amp_fp16
 export MICRO_BS=16 # max for baseline: 16 (JURECA)
 export EVAL_MICRO_BS="$((2 * MICRO_BS))" # 16 is max for 4 layers, 10240 width
+export FSDP_STRATEGY="FULL_SHARD" 
 
 # schedule
 export SCHEDULER_NAME="constant_with_warmup"  # linear_decay_with_warmup / constant_with_warmup / cosine_with_warmup

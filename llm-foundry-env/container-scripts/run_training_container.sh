@@ -70,7 +70,8 @@ python -u -m composer \
     save_num_checkpoints_to_keep="$SAVE_NUM_CHECKPOINTS_TO_KEEP" \
     eval_interval="$EVAL_INTERVAL" \
     loggers.wandb.entity="$WANDB_ENTITY" \
-    loggers.wandb.project="$WANDB_PROJECT"
+    loggers.wandb.project="$WANDB_PROJECT" \
+    fsdp_config.sharding_strategy="$FSDP_STRATEGY"
 
     # scheduler.alpha_f="$ALPHA_F" \
 
