@@ -72,7 +72,7 @@ venv_dir="$scratch_dir"/env
 data_dir="$scratch_dir"/data
 
 # Where to store model checkpoints.
-checkpoint_dir="$scratch_dir"/experiments
+checkpoint_dir=/p/fastdata/trustllmd/"$USER"/experiments # "$scratch_dir"/experiments
 
 # Which container to build.
 docker_image_uri='docker://docker.io/mosaicml/pytorch:2.2.1_cu121-python3.11-ubuntu20.04'
