@@ -46,6 +46,7 @@ export TRAIN_NUM_WORKERS=8
 export EVAL_NUM_WORKERS=3
 
 # NCCL timeout 
+export NCCL_LL_THRESHOLD=0
 export NCCL_IB_TIMEOUT=500
 export UCX_RC_TIMEOUT=40s
 export NCCL_IB_RETRY_CNT=100
@@ -79,6 +80,7 @@ export WEIGHT_DECAY=0.0 # 0.00001
 
 # machine dependent (juwels/jureca)
 export PRECISION="amp_bf16" # amp_bf16 / amp_fp16
+export ATTN_IMPL="flash" # flash / torch
 export MICRO_BS=16 # max for baseline: 16 (JURECA)
 export EVAL_MICRO_BS="$((2 * MICRO_BS))" # 16 is max for 4 layers, 10240 width
 export FSDP_STRATEGY="FULL_SHARD" 

@@ -51,6 +51,7 @@ python -u -m composer \
     model.d_model="$D_MODEL" \
     model.n_layers="$N_LAYERS" \
     model.n_heads="$N_HEADS" \
+    model.attn_config.attn_impl="$ATTN_IMPL" \
     model._mup_config.d_model_base="$D_MODEL_BASE" \
     model._mup_config.n_heads_base="$N_HEADS_BASE" \
     experiment_name="$EXPERIMENT_NAME" \
