@@ -69,10 +69,11 @@ scratch_dir="$base_scratch_dir"/"$env_name"
 venv_dir="$scratch_dir"/env
 
 # Where to store preprocessed datasets.
-data_dir="$scratch_dir"/data
+# `base_data_dir` is configured in `../global_configuration.sh`.
+data_dir="$base_data_dir"/data
 
 # Where to store model checkpoints.
-checkpoint_dir=/p/fastdata/trustllmd/"$USER"/experiments # "$scratch_dir"/experiments
+checkpoint_dir="$base_data_dir"/experiments # "$scratch_dir"/experiments
 
 # Which container to build.
 docker_image_uri='docker://docker.io/mosaicml/pytorch:2.2.1_cu121-python3.11-ubuntu20.04'

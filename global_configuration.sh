@@ -25,11 +25,11 @@ source "$(get_curr_dir)"/global-scripts/load_machine.sh "$machine_name"
 
 # Directory where the environment's permanent files will be set up
 # (e.g. code or included repositories).
-base_project_dir="$root_project_dir"/"$project_name"/"$USER"
+base_project_dir=$PROJECT_trustllm-eu/"$USER"
 
 # Directory where the environment's non-permanent files (e.g. Python
 # `venv`, container, ...) will be set up.
-base_scratch_dir="$root_scratch_dir"/"$project_name"/"$USER"
+base_scratch_dir=$SCRATCH_trustllm-eu/"$USER"
 # Where cache files are stored.
 cache_dir="$base_scratch_dir"/.cache
 
@@ -53,6 +53,5 @@ torch_cache_dir="$cache_dir"/torch
 # Root directory for caches of various HuggingFace libraries.
 hf_cache_dir="$cache_dir"/huggingface
 
-# ---
-
-pop_curr_file
+# Directory to store datasets and checkpoints
+base_data_dir=/p/data1/trustllmd/"$USER"
