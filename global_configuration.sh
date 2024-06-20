@@ -25,11 +25,11 @@ source "$(get_curr_dir)"/global-scripts/load_machine.sh "$machine_name"
 
 # Directory where the environment's permanent files will be set up
 # (e.g. code or included repositories).
-base_project_dir=$PROJECT_trustllm-eu/"$USER"
+base_project_dir="$root_project_dir"/"$project_name"/"$USER"
 
 # Directory where the environment's non-permanent files (e.g. Python
 # `venv`, container, ...) will be set up.
-base_scratch_dir=$SCRATCH_trustllm-eu/"$USER"
+base_scratch_dir="$root_scratch_dir"/"$project_name"/"$USER"
 # Where cache files are stored.
 cache_dir="$base_scratch_dir"/.cache
 
@@ -55,3 +55,7 @@ hf_cache_dir="$cache_dir"/huggingface
 
 # Directory to store datasets and checkpoints
 base_data_dir=/p/data1/trustllmd/"$USER"
+
+# ---
+
+pop_curr_file

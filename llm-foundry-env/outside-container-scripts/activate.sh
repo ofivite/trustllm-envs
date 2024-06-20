@@ -4,10 +4,6 @@
 
 set -euo pipefail
 
-module purge
-module load Stages/2024
-module load GCC NCCL
-
 # Do not use these variables; they may be overwritten. Instead, use
 # `get_curr_file` or `get_curr_dir` after sourcing `get_curr_file.sh`.
 _curr_file="${BASH_SOURCE[0]:-${(%):-%x}}"
