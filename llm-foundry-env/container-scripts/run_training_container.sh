@@ -24,6 +24,8 @@ TRAIN_NUM_WORKERS="${TRAIN_NUM_WORKERS:-0}"
 EVAL_NUM_WORKERS="${EVAL_NUM_WORKERS:-0}"
 
 vocab_size="$(python -u "$(get_curr_dir)"/../py-scripts/get_vocab_size.py "$TOKENIZER_DIR")"
+echo "Fetched vocab size: $vocab_size"
+
 # Vocab size will be padded to a multiple of this value.
 pad_vocab_size_to=128
 if [ "$((vocab_size % pad_vocab_size_to))" -eq 0 ]; then
@@ -58,19 +60,58 @@ python -u -m composer \
     --master_port="$MASTER_PORT" \
     train/train.py \
     "$TRAIN_CONFIG_YAML_FILE" \
+    variables.run_name="$RUN_NAME" \
+    variables.global_seed="$GLOBAL_SEED" \
     variables.data_local="$INPUT_DATA_ROOT_DIR" \
-    variables.max_seq_len=2048 \
+    variables.max_seq_len="$MAX_SEQ_LEN" \
     tokenizer.name="$TOKENIZER_DIR" \
-    train_loader.num_workers="$TRAIN_NUM_WORKERS" \
-    train_loader.dataset.split=train \
-    eval_loader.num_workers="$EVAL_NUM_WORKERS" \
-    eval_loader.dataset.split=val \
-    model.attn_config.attn_impl=flash \
+    variables.train_num_workers="$TRAIN_NUM_WORKERS" \
+    variables.eval_num_workers="$EVAL_NUM_WORKERS" \
+    global_train_batch_size="$GLOBAL_BS" \
+    device_train_microbatch_size="$MICRO_BS" \
+    device_eval_batch_size="$EVAL_MICRO_BS" \
     model.vocab_size="$padded_vocab_size" \
-    fsdp_config.mixed_precision=DEFAULT \
-    max_duration=10ba \
-    eval_interval=0 \
-    save_folder="$MODEL_CHECKPOINT_DIR"
+    model.d_model="$D_MODEL" \
+    model.n_layers="$N_LAYERS" \
+    model.n_heads="$N_HEADS" \
+    model.expansion_ratio="$EXPANSION_RATIO" \
+    model.attn_config.kv_n_heads="$KV_N_HEADS" \
+    variables.eps_base="$EPS_BASE" \
+    precision="$PRECISION" \
+    accumulate_train_batch_on_tokens="$ACCUMULATE_TRAIN_BATCH_ON_TOKENS" \
+    optimizer.name="$OPTIMIZER_NAME" \
+    optimizer.lr="$LR_BASE" \
+    variables.embedding_lr="$EMBEDDING_LR" \
+    variables.embedding_momentum="$EMBEDDING_MOMENTUM" \
+    variables.embedding_nesterov="$EMBEDDING_NESTEROV" \
+    variables.embedding_dual="$EMBEDDING_DUAL" \
+    variables.dual_norm_scaling="$DUAL_NORM_SCALING" \
+    scheduler.name="$SCHEDULER_NAME" \
+    scheduler.t_warmup="$T_WARMUP" \
+    scheduler.t_constant="$T_CONSTANT" \
+    scheduler.t_decay="$T_DECAY" \
+    scheduler.alpha_f="$ALPHA_F" \
+    max_duration="$MAX_DURATION" \
+    eval_interval="$EVAL_INTERVAL" \
+    save_folder="$SAVE_FOLDER" \
+    save_interval="$SAVE_INTERVAL" \
+    save_overwrite="$SAVE_OVERWRITE" \
+    save_num_checkpoints_to_keep="$SAVE_NUM_CHECKPOINTS_TO_KEEP" \
+    loggers.mlflow.experiment_name="$EXPERIMENT_NAME" \
+    loggers.mlflow.tracking_uri="$MLFLOW_LOG_DIR" \
+    loggers.mlflow.resume="$MLFLOW_RESUME" \
+    loggers.tensorboard.log_dir="$TENSORBOARD_LOG_DIR" \
+    load_path="$LOAD_PATH"
+
+    # fsdp_config.sharding_strategy="$FSDP_STRATEGY" \
+    # fsdp_config.mixed_precision=DEFAULT \
+    # optimizer.betas=\["$BETA_1","$BETA_2"\] \
+    # optimizer.weight_decay="$WEIGHT_DECAY" \
+
+    # variables.mup_config.init_std_base="$INIT_STD_BASE" \
+    # variables.mup_config.d_model_base="$D_MODEL_BASE" \
+    # variables.mup_config.n_heads_base="$N_HEADS_BASE" \
+    # variables.mup_config.eps_base="$EPS_BASE" \
 
 # # Convert the model to HuggingFace format
 # python inference/convert_composer_to_hf.py \
