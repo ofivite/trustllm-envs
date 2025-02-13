@@ -75,15 +75,18 @@ python -u -m composer \
     model.n_layers="$N_LAYERS" \
     model.n_heads="$N_HEADS" \
     model.expansion_ratio="$EXPANSION_RATIO" \
-    model.attn_config.kv_n_heads="$KV_N_HEADS" \
+    model.norm_type="$NORM_TYPE" \
     variables.eps_base="$EPS_BASE" \
     precision="$PRECISION" \
     accumulate_train_batch_on_tokens="$ACCUMULATE_TRAIN_BATCH_ON_TOKENS" \
     optimizer.name="$OPTIMIZER_NAME" \
-    optimizer.lr="$LR_BASE" \
-    variables.embedding_lr="$EMBEDDING_LR" \
+    variables.lr_base="$LR_BASE" \
+    variables.init_std_base="$INIT_STD_BASE" \
+    variables.emb_init_std_base="$EMB_INIT_STD_BASE" \
+    variables.embedding_lr_base="$EMBEDDING_LR_BASE" \
     variables.embedding_momentum="$EMBEDDING_MOMENTUM" \
     variables.embedding_nesterov="$EMBEDDING_NESTEROV" \
+    variables.embedding_norm_factor="$EMBEDDING_NORM_FACTOR" \
     variables.embedding_dual="$EMBEDDING_DUAL" \
     variables.dual_norm_scaling="$DUAL_NORM_SCALING" \
     scheduler.name="$SCHEDULER_NAME" \
@@ -108,6 +111,7 @@ python -u -m composer \
     # optimizer.betas=\["$BETA_1","$BETA_2"\] \
     # optimizer.weight_decay="$WEIGHT_DECAY" \
 
+    # model.attn_config.kv_n_heads="$KV_N_HEADS" \
     # variables.mup_config.init_std_base="$INIT_STD_BASE" \
     # variables.mup_config.d_model_base="$D_MODEL_BASE" \
     # variables.mup_config.n_heads_base="$N_HEADS_BASE" \
