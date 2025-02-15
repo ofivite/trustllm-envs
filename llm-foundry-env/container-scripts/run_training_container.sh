@@ -80,6 +80,8 @@ python -u -m composer \
     precision="$PRECISION" \
     accumulate_train_batch_on_tokens="$ACCUMULATE_TRAIN_BATCH_ON_TOKENS" \
     optimizer.name="$OPTIMIZER_NAME" \
+    optimizer.momentum="$GLOBAL_MOMENTUM" \
+    optimizer.nesterov="$GLOBAL_NESTEROV" \
     variables.lr_base="$LR_BASE" \
     variables.init_std_base="$INIT_STD_BASE" \
     variables.emb_init_std_base="$EMB_INIT_STD_BASE" \

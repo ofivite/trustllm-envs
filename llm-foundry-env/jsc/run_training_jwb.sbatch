@@ -2,12 +2,12 @@
 
 # Run a model training on JUWELS Booster.
 
-#SBATCH --nodes=8
+#SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=48  # 48 physical cores per node.
 #SBATCH --threads-per-core=1  # Use only physical CPU cores.
 #SBATCH --gres=gpu:4
-#SBATCH --time=03:59:59
+#SBATCH --time=01:59:59
 #SBATCH --account=besl
 # Use `develbooster` for debugging, `booster` for "normal" jobs, and
 # `largebooster` for jobs on more than 256 nodes.
@@ -77,7 +77,7 @@ export TOKENIZER_DIR=/p/data1/trustllmd/filatov1/tokenizers/baseline-tok
 
 # model
 export N_LAYERS=2
-export D_MODEL=4096
+export D_MODEL=256
 export D_HEAD=64
 export EXPANSION_RATIO=4
 
@@ -87,6 +87,9 @@ export EPS_BASE=1e-10
 # base_lrs=( 0.00024414 0.00048828 0.00097656 0.00195312 0.00390625 0.0078125 0.015625 0.03125 0.0625 ) # np.logspace(-12, -4, 9, base=2)
 base_lrs=( 1.52587891e-05 3.05175781e-05 6.10351562e-05 1.22070312e-04 2.44140625e-04 4.88281250e-04 9.76562500e-04 1.95312500e-03 3.90625000e-03 7.81250000e-03 1.56250000e-02 3.12500000e-02 6.25000000e-02 1.25000000e-01 2.50000000e-01 ) # np.logspace(-16, -2, 15, base=2)
 export LR_BASE="${base_lrs[$SLURM_ARRAY_TASK_ID]}"
+export GLOBAL_MOMENTUM=0
+export GLOBAL_NESTEROV=false
+
 export EMBEDDING_MOMENTUM=0.95
 export EMBEDDING_NESTEROV=true
 export EMBEDDING_DUAL=false
@@ -125,7 +128,7 @@ export N_HEADS="$((D_MODEL / D_HEAD))"
 # export N_HEADS="$((D_MODEL / D_HEAD))"
 
 # batching
-export MICRO_BS=1
+export MICRO_BS=8
 export EVAL_MICRO_BS="$((1 * MICRO_BS))"
 export GLOBAL_BS=256
 
@@ -152,7 +155,7 @@ export SAVE_NUM_CHECKPOINTS_TO_KEEP=1
 
 # experiment
 export EXPERIMENT_NAME=muon-scaling-v5-width-"$D_MODEL" # muon-scaling-v1-width-"$D_MODEL"
-export RUN_NAME=lr-"$SLURM_ARRAY_TASK_ID"-untied-tuned-head-v1-warmup-"$T_WARMUP" # -emb-sgd-mup-tuned-logit-inv-sqrt-v1
+export RUN_NAME=lr-"$SLURM_ARRAY_TASK_ID"-untied-tuned-head-v1-warmup-"$T_WARMUP"-no-hidden-mom # -emb-sgd-mup-tuned-logit-inv-sqrt-v1
 # export RUN_NAME=run-width-"$D_MODEL"-lr-"$SLURM_ARRAY_TASK_ID"-bs-"$GLOBAL_BS"-embed-lr-"$EMBEDDING_LR"-mom-"$EMBEDDING_MOMENTUM"-eps-"$EPS_BASE"-dual-scaling-"$DUAL_NORM_SCALING"-emb-dual-"$EMBEDDING_DUAL"-opt-v2-init-v3
 # export RUN_NAME=run-lr-"$SLURM_ARRAY_TASK_ID"-bs-"$GLOBAL_BS"-dur-"$MAX_DURATION"-embed-lr-"$EMBEDDING_LR"-mom-"$EMBEDDING_MOMENTUM"-eps-"$EPS_BASE"-dual-scaling-"$DUAL_NORM_SCALING"-opt-v1-init-v3-no-clip #-seed-"$GLOBAL_SEED"
 # export RUN_NAME=run-lr-"$SLURM_ARRAY_TASK_ID"-no-clip-warmup-"$T_WARMUP"
