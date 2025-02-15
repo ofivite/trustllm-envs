@@ -88,6 +88,9 @@ python -u -m composer \
     variables.embedding_nesterov="$EMBEDDING_NESTEROV" \
     variables.embedding_norm_factor="$EMBEDDING_NORM_FACTOR" \
     variables.embedding_dual="$EMBEDDING_DUAL" \
+    variables.embedding_backend="$EMBEDDING_BACKEND" \
+    variables.unembedding_norm_factor="$UNEMBEDDING_NORM_FACTOR" \
+    variables.unembedding_backend="$UNEMBEDDING_BACKEND" \
     variables.dual_norm_scaling="$DUAL_NORM_SCALING" \
     scheduler.name="$SCHEDULER_NAME" \
     scheduler.t_warmup="$T_WARMUP" \
@@ -104,6 +107,8 @@ python -u -m composer \
     loggers.mlflow.tracking_uri="$MLFLOW_LOG_DIR" \
     loggers.mlflow.resume="$MLFLOW_RESUME" \
     loggers.tensorboard.log_dir="$TENSORBOARD_LOG_DIR" \
+    callbacks.optimizer_monitor.batch_log_interval="$NORM_LOG_INTERVAL" \
+    callbacks.mup_monitor.batch_log_interval="$NORM_LOG_INTERVAL" \
     load_path="$LOAD_PATH"
 
     # fsdp_config.sharding_strategy="$FSDP_STRATEGY" \
