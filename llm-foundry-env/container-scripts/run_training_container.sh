@@ -82,6 +82,7 @@ python -u -m composer \
     optimizer.name="$OPTIMIZER_NAME" \
     optimizer.momentum="$GLOBAL_MOMENTUM" \
     optimizer.nesterov="$GLOBAL_NESTEROV" \
+    optimizer.backend_steps="$BACKEND_STEPS" \
     variables.lr_base="$LR_BASE" \
     variables.init_std_base="$INIT_STD_BASE" \
     variables.emb_init_std_base="$EMB_INIT_STD_BASE" \
