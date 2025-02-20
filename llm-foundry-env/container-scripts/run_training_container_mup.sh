@@ -75,6 +75,7 @@ python -u -m composer \
     model.n_layers="$N_LAYERS" \
     model.n_heads="$N_HEADS" \
     model.expansion_ratio="$EXPANSION_RATIO" \
+    model.norm_type="$NORM_TYPE" \
     variables.eps_base="$EPS_BASE" \
     precision="$PRECISION" \
     accumulate_train_batch_on_tokens="$ACCUMULATE_TRAIN_BATCH_ON_TOKENS" \
@@ -83,6 +84,7 @@ python -u -m composer \
     optimizer.betas=\["$BETA_1","$BETA_2"\] \
     optimizer.weight_decay="$WEIGHT_DECAY" \
     variables.mup_config.init_std_base="$INIT_STD_BASE" \
+    variables.mup_config.emb_init_std_base="$EMB_INIT_STD_BASE" \
     variables.mup_config.d_model_base="$D_MODEL_BASE" \
     variables.mup_config.n_heads_base="$N_HEADS_BASE" \
     variables.mup_config.eps_base="$EPS_BASE" \
@@ -101,6 +103,8 @@ python -u -m composer \
     loggers.mlflow.tracking_uri="$MLFLOW_LOG_DIR" \
     loggers.mlflow.resume="$MLFLOW_RESUME" \
     loggers.tensorboard.log_dir="$TENSORBOARD_LOG_DIR" \
+    callbacks.optimizer_monitor.batch_log_interval="$NORM_LOG_INTERVAL" \
+    callbacks.mup_monitor.batch_log_interval="$NORM_LOG_INTERVAL" \
     load_path="$LOAD_PATH"
 
     # fsdp_config.sharding_strategy="$FSDP_STRATEGY" \
