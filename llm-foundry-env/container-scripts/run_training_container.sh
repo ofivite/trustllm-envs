@@ -76,6 +76,9 @@ python -u -m composer \
     model.n_heads="$N_HEADS" \
     model.expansion_ratio="$EXPANSION_RATIO" \
     model.norm_type="$NORM_TYPE" \
+    model.attn_config.qk_ln="$QK_LN" \
+    model.ffn_config.ffn_type="$FFN_TYPE" \
+    model.ffn_config.ffn_act_fn.name="$FFN_ACT_NAME" \
     variables.eps_base="$EPS_BASE" \
     precision="$PRECISION" \
     accumulate_train_batch_on_tokens="$ACCUMULATE_TRAIN_BATCH_ON_TOKENS" \
