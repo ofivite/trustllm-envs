@@ -49,39 +49,45 @@ python -u -m torchrun_jsc \
        --rdzv_endpoint="$MASTER_ADDR":"$MASTER_PORT" \
        --rdzv_backend=c10d \
        "$torchtitan_repo_dir"/train.py  \
-       --job.description='Byte-Llama-2 7B training' \
-       --job.config_file="$torchtitan_repo_dir"/torchtitan/models/llama/train_configs/llama3_8b.toml \
-       --job.dump_folder="$checkpoint_dir" \
+       --job.config_file="$CONFIG_FILE" \
+       --job.dump_folder="$DUMP_FOLDER" \
+       --job.description='training' \
        --job.print_args \
-       --training.steps=10 \
-       --training.seq_len=4096 \
-       --training.batch_size=1 \
-       --training.global_batch_size=8 \
-       --training.data_parallel_replicate_degree="$(((NUM_NODES * DEVICES_PER_NODE) / GPUS_PER_REPLICA))" \
-       --training.tensor_parallel_degree=1 \
-       --training.mixed_precision_param=bfloat16 \
-       --training.mixed_precision_reduce=float32 \
-       --training.max_norm=1.0 \
-       --training.warmup_steps=500 \
-       --training.compile \
+       --metrics.log_freq="$LOG_FREQ" \
+       --metrics.enable_tensorboard \
+       --metrics.save_tb_folder=logs \
+       --metrics.enable_wandb \
+       --metrics.wandb_project="$WANDB_PROJECT" \
+       --metrics.wandb_group="$WANDB_GROUP" \
+       --metrics.wandb_name="$WANDB_NAME" \
+       --metrics.rank_0_only \
+       --model.name="$MODEL_NAME" \
+       --model.flavor="$MODEL_FLAVOR" \
+       --model.norm_type="$NORM_TYPE" \
+       --model.tokenizer_path="$TOKENIZER_MODEL_FILE" \
+       --training.seed="$SEED" \
        --training.dataset=simple_custom \
        --training.dataset_path="$TRAIN_DATA_PATH" \
        "${dataset_files_arg[@]}" \
        "${dataset_inner_name_arg[@]}" \
        --training.dataset_streaming \
-       --training.seed=0 \
-       --model.name=byte_llama2 \
-       --model.flavor=7B \
-       --model.norm_type=rmsnorm \
-       --model.tokenizer_path="$TOKENIZER_MODEL_FILE" \
-       --activation_checkpoint.mode=selective \
-       --activation_checkpoint.selective_ac_option=op \
-       --optimizer.name=AdamW \
-       --optimizer.lr=3e-4 \
-       --optimizer.fused \
-       --metrics.log_freq=1 \
-       --metrics.enable_tensorboard \
+       --training.steps="$STEPS" \
+       --training.seq_len="$SEQ_LEN" \
+       --training.batch_size="$BATCH_SIZE" \
+       --training.global_batch_size="$GLOBAL_BATCH_SIZE" \
+       --training.warmup_steps="$WARMUP_STEPS" \
+       --training.max_norm="$MAX_NORM" \
+       --training.data_parallel_replicate_degree="$(((NUM_NODES * DEVICES_PER_NODE)))" \
+       --training.data_parallel_shard_degree=1 \
+       --training.fsdp_reshard_after_forward=never \
+       --training.tensor_parallel_degree=1 \
+       --training.compile \
+       --training.mixed_precision_param=bfloat16 \
+       --training.mixed_precision_reduce=float32 \
        --checkpoint.enable_checkpoint \
-       --checkpoint.interval=1000 \
+       --checkpoint.folder=checkpoints \
+       --checkpoint.interval="$CHECKPOINT_INTERVAL" \
        --checkpoint.export_dtype=bfloat16 \
-       --checkpoint.async_mode=async
+       --checkpoint.async_mode="disabled" \
+       --activation_checkpoint.mode="none" \
+       --activation_checkpoint.selective_ac_option=op
