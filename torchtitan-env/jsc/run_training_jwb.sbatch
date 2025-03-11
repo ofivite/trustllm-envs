@@ -92,7 +92,7 @@ run_name=test-"$SLURM_JOB_ID"
 export SEED=1
 export MODEL_NAME=bit_byte_llama3
 export MODEL_FLAVOR=debugmodel
-export NORM_TYPE=rmsnorm
+export NORM_TYPE=np_rmsnorm
 
 # optimizer
 export OPTIMIZER_NAME=AdamW
@@ -111,6 +111,7 @@ export CHECKPOINT_INTERVAL=1000
 
 # logging
 export LOG_FREQ=1
+export LOG_NORM_FREQ=2
 export DUMP_FOLDER="$checkpoint_dir"/"$exp_name"/"$run_name"
 export WANDB_MODE=offline
 export WANDB_PROJECT=scaling-titans
