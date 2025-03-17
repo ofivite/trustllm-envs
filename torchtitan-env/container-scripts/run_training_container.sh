@@ -13,7 +13,7 @@ fi
 
 # -----
 
-torchtitan_repo_dir="$ext_repo_dir"/torchtitan
+torchtitan_repo_dir="$ext_repo_dir"/torchtitan/torchtitan
 
 # Below is a TorchTitan Llama-2 pretraining example configuration,
 # with major settings being
@@ -54,6 +54,7 @@ python -u -m torchrun_jsc \
        --job.description='training' \
        --job.print_args \
        --metrics.log_freq="$LOG_FREQ" \
+       --metrics.log_norm_freq="$LOG_NORM_FREQ" \
        --metrics.enable_tensorboard \
        --metrics.save_tb_folder=logs \
        --metrics.enable_wandb \
@@ -61,6 +62,20 @@ python -u -m torchrun_jsc \
        --metrics.wandb_group="$WANDB_GROUP" \
        --metrics.wandb_name="$WANDB_NAME" \
        --metrics.rank_0_only \
+       --optimizer.name="$OPTIMIZER_NAME" \
+       --optimizer.lr="$LR" \
+       --optimizer.eps="$EPS" \
+       --optimizer.backend_steps="$BACKEND_STEPS" \
+       --optimizer.momentum="$MOMENTUM" \
+       --optimizer.nesterov \
+       --optimizer.embed_lr="$EMBED_LR" \
+       --optimizer.unembed_lr="$UNEMBED_LR" \
+       --optimizer.embed_str_match="$EMBED_STR_MATCH" \
+       --optimizer.unembed_str_match="$UNEMBED_STR_MATCH" \
+       --lr_scheduler.warmup_steps="$WARMUP_STEPS" \
+       --lr_scheduler.decay_ratio="$DECAY_RATIO" \
+       --lr_scheduler.decay_type="$DECAY_TYPE" \
+       --lr_scheduler.lr_min="$LR_MIN" \
        --model.name="$MODEL_NAME" \
        --model.flavor="$MODEL_FLAVOR" \
        --model.norm_type="$NORM_TYPE" \
@@ -75,11 +90,10 @@ python -u -m torchrun_jsc \
        --training.seq_len="$SEQ_LEN" \
        --training.batch_size="$BATCH_SIZE" \
        --training.global_batch_size="$GLOBAL_BATCH_SIZE" \
-       --training.warmup_steps="$WARMUP_STEPS" \
        --training.max_norm="$MAX_NORM" \
-       --training.data_parallel_replicate_degree="$(((NUM_NODES * DEVICES_PER_NODE)))" \
-       --training.data_parallel_shard_degree=1 \
-       --training.fsdp_reshard_after_forward=never \
+       --training.data_parallel_replicate_degree=1 \
+       --training.data_parallel_shard_degree=-1 \
+       --training.fsdp_reshard_after_forward=default \
        --training.tensor_parallel_degree=1 \
        --training.compile \
        --training.mixed_precision_param=bfloat16 \
@@ -91,3 +105,11 @@ python -u -m torchrun_jsc \
        --checkpoint.async_mode="disabled" \
        --activation_checkpoint.mode="none" \
        --activation_checkpoint.selective_ac_option=op
+
+    #    --training.data_parallel_replicate_degree="$(((NUM_NODES * DEVICES_PER_NODE)))" \
+    #    --training.data_parallel_shard_degree=1 \
+    #    --training.fsdp_reshard_after_forward=never \
+    
+    #    --training.data_parallel_replicate_degree="$(((NUM_NODES * DEVICES_PER_NODE) / GPUS_PER_REPLICA))" \
+    #    --training.data_parallel_shard_degree=-1 \
+    #    --training.fsdp_reshard_after_forward=default \

@@ -12,6 +12,7 @@
 # Use `develbooster` for debugging, `booster` for "normal" jobs, and
 # `largebooster` for jobs on more than 256 nodes.
 #SBATCH --partition=dc-gpu-devel
+#SBATCH --array=9
 
 set -euo pipefail
 
@@ -84,34 +85,49 @@ export TRAIN_DATA_INNER_NAME=''
 export TOKENIZER_MODEL_FILE=TICKIETACKIE
 export CONFIG_FILE=/p/project1/trustllm-eu/filatov1/trustllm/torchtitan/repos/torchtitan/torchtitan/models/llama/train_configs/dev_normy.toml
 
-exp_name=llama3_debug
-# run_name=test-13493474
-run_name=test-"$SLURM_JOB_ID"
-
 # model specification
-export SEED=1
+model_kind=large
+export SEED=123
 export MODEL_NAME=bit_byte_llama3
-export MODEL_FLAVOR=debugmodel
+export MODEL_FLAVOR=debugmodel-"$model_kind"
 export NORM_TYPE=np_rmsnorm
 
 # optimizer
-export OPTIMIZER_NAME=AdamW
-export LR=3e-4
-export MAX_NORM=1
+export OPTIMIZER_NAME=Scion
+base_lrs=( 1.52587891e-05 3.05175781e-05 6.10351562e-05 1.22070312e-04 2.44140625e-04 4.88281250e-04 9.76562500e-04 1.95312500e-03 3.90625000e-03 7.81250000e-03 1.56250000e-02 3.12500000e-02 6.25000000e-02 1.25000000e-01 2.50000000e-01 ) # np.logspace(-16, -2, 15, base=2)
+export LR="${base_lrs[$SLURM_ARRAY_TASK_ID]}"
+export EPS=1e-12
+export BACKEND_STEPS=5
+export MOMENTUM=0.95 # will use nesterov by default
+export EMBED_LR=$LR
+export UNEMBED_LR=$LR
+export EMBED_STR_MATCH="tok_embeddings.weight"
+export UNEMBED_STR_MATCH="output.weight"
+export MAX_NORM=-1
 
-# training / data schedule
-export STEPS=10
+# batch
 export SEQ_LEN=4096
 export BATCH_SIZE=1
-export GLOBAL_BATCH_SIZE=8
-export WARMUP_STEPS=100
+export GLOBAL_BATCH_SIZE=16
+
+# schedule
+export STEPS=100
+export WARMUP_STEPS=0
+export DECAY_RATIO=0.25
+export DECAY_TYPE=linear
+export LR_MIN=0.0
 
 # checkpointing
 export CHECKPOINT_INTERVAL=1000
 
+# wandb
+exp_name=norm-check-v0
+# run_name=test-"$SLURM_JOB_ID"-fsdp
+run_name=seed-"$SEED"-width-"$model_kind"-lr-"$SLURM_ARRAY_TASK_ID"-fsdp
+
 # logging
 export LOG_FREQ=1
-export LOG_NORM_FREQ=2
+export LOG_NORM_FREQ=999999999
 export DUMP_FOLDER="$checkpoint_dir"/"$exp_name"/"$run_name"
 export WANDB_MODE=offline
 export WANDB_PROJECT=scaling-titans
