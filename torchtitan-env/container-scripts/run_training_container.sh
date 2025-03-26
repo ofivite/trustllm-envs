@@ -78,6 +78,7 @@ python -u -m torchrun_jsc \
        --lr_scheduler.lr_min="$LR_MIN" \
        --model.name="$MODEL_NAME" \
        --model.flavor="$MODEL_FLAVOR" \
+       --model.init_std="$INIT_STD" \
        --model.norm_type="$NORM_TYPE" \
        --model.tokenizer_path="$TOKENIZER_MODEL_FILE" \
        --training.seed="$SEED" \
@@ -108,8 +109,6 @@ python -u -m torchrun_jsc \
 
     #    --training.data_parallel_replicate_degree="$(((NUM_NODES * DEVICES_PER_NODE)))" \
     #    --training.data_parallel_shard_degree=1 \
-    #    --training.fsdp_reshard_after_forward=never \
     
-    #    --training.data_parallel_replicate_degree="$(((NUM_NODES * DEVICES_PER_NODE) / GPUS_PER_REPLICA))" \
+    #    --training.data_parallel_replicate_degree=1 \
     #    --training.data_parallel_shard_degree=-1 \
-    #    --training.fsdp_reshard_after_forward=default \
