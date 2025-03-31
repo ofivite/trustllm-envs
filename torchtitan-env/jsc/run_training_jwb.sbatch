@@ -91,7 +91,7 @@ export SEED=123
 export MODEL_NAME=bit_byte_llama3
 export MODEL_FLAVOR=debugmodel-multiplier-"$model_kind"
 export NORM_TYPE=np_rmsnorm
-export INIT_STD=1.0
+export INIT_STD=0 # 0: row-normal -> orthogonal -> 0-output; < 0: row-normal -> orthogonal -> row-normal;
 
 # optimizer
 export OPTIMIZER_NAME=Scion # Scion
