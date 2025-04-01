@@ -61,7 +61,6 @@ python -u -m torchrun_jsc \
        --metrics.wandb_project="$WANDB_PROJECT" \
        --metrics.wandb_group="$WANDB_GROUP" \
        --metrics.wandb_name="$WANDB_NAME" \
-       --metrics.rank_0_only \
        --optimizer.name="$OPTIMIZER_NAME" \
        --optimizer.lr="$LR" \
        --optimizer.eps="$EPS" \
@@ -92,10 +91,10 @@ python -u -m torchrun_jsc \
        --training.batch_size="$BATCH_SIZE" \
        --training.global_batch_size="$GLOBAL_BATCH_SIZE" \
        --training.max_norm="$MAX_NORM" \
-       --training.data_parallel_replicate_degree=1 \
-       --training.data_parallel_shard_degree=-1 \
-       --training.fsdp_reshard_after_forward=default \
-       --training.tensor_parallel_degree=1 \
+       --parallelism.data_parallel_replicate_degree=1 \
+       --parallelism.data_parallel_shard_degree=-1 \
+       --parallelism.fsdp_reshard_after_forward=default \
+       --parallelism.tensor_parallel_degree=1 \
        --training.compile \
        --training.mixed_precision_param=bfloat16 \
        --training.mixed_precision_reduce=float32 \
