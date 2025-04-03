@@ -94,12 +94,12 @@ export NORM_TYPE=np_rmsnorm
 export INIT_STD=0 # 0: row-normal -> orthogonal -> 0-output; < 0: row-normal -> orthogonal -> row-normal;
 
 # optimizer
-export OPTIMIZER_NAME=Scion # Scion
+export OPTIMIZER_NAME=Scion
 base_lrs=( 9.765625e-04 1.953125e-03 3.906250e-03 7.812500e-03 1.562500e-02 3.125000e-02 6.250000e-02 1.250000e-01 2.500000e-01 5.000000e-01 1.000000e+00 2.000000e+00 ) # np.logspace(-10, 1, 12, base=2)
 export LR="${base_lrs[$SLURM_ARRAY_TASK_ID]}"
 export EPS=1e-12
 export BACKEND_STEPS=5
-export MOMENTUM=0.9 # will use nesterov by default
+export MOMENTUM=0.1
 export EMBED_LR=$LR
 export UNEMBED_LR=$LR
 export EMBED_STR_MATCH="tok_embeddings.weight"

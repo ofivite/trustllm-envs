@@ -66,7 +66,6 @@ python -u -m torchrun_jsc \
        --optimizer.eps="$EPS" \
        --optimizer.backend_steps="$BACKEND_STEPS" \
        --optimizer.momentum="$MOMENTUM" \
-       --optimizer.nesterov \
        --optimizer.embed_lr="$EMBED_LR" \
        --optimizer.unembed_lr="$UNEMBED_LR" \
        --optimizer.embed_str_match="$EMBED_STR_MATCH" \
@@ -106,8 +105,10 @@ python -u -m torchrun_jsc \
        --activation_checkpoint.mode="none" \
        --activation_checkpoint.selective_ac_option=op
 
-    #    --training.data_parallel_replicate_degree="$(((NUM_NODES * DEVICES_PER_NODE)))" \
-    #    --training.data_parallel_shard_degree=1 \
+    #    --parallelism.data_parallel_replicate_degree="$(((NUM_NODES * DEVICES_PER_NODE)))" \
+    #    --parallelism.data_parallel_shard_degree=1 \
     
-    #    --training.data_parallel_replicate_degree=1 \
-    #    --training.data_parallel_shard_degree=-1 \
+    #    --parallelism.data_parallel_replicate_degree=1 \
+    #    --parallelism.data_parallel_shard_degree=-1 \
+
+    # --optimizer.nesterov \
