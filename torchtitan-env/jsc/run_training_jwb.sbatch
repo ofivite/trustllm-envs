@@ -83,19 +83,21 @@ export TRAIN_DATA_FILES=''
 export TRAIN_DATA_INNER_NAME=''
 
 export TOKENIZER_MODEL_FILE=TICKIETACKIE
-export CONFIG_FILE=/p/project1/trustllm-eu/filatov1/trustllm/torchtitan/repos/torchtitan/torchtitan/models/llama/train_configs/dev_normy.toml
+export CONFIG_FILE=/p/project1/trustllm-eu/filatov1/trustllm/torchtitan/repos/torchtitan/torchtitan/models/llama3/train_configs/dev_normy.toml
 
 # model specification
-model_kind=8
+model_kind=1
 export SEED=123
-export MODEL_NAME=bit_byte_llama3
-export MODEL_FLAVOR=debugmodel-multiplier-"$model_kind"
+export MODEL_NAME=byte_llama3 # bit_byte_llama3 / byte_MoEllama3
+export MODEL_FLAVOR=debugmodel-multiplier-"$model_kind" # debugmodel-multiplier-"$model_kind"
 export NORM_TYPE=np_rmsnorm
-export INIT_STD=0 # 0: row-normal -> orthogonal -> 0-output; < 0: row-normal -> orthogonal -> row-normal;
 
 # optimizer
+#### (for Scion) make sure setting is_light / is_unconstrained / nesterov in `toml` file 
 export OPTIMIZER_NAME=Scion
 base_lrs=( 9.765625e-04 1.953125e-03 3.906250e-03 7.812500e-03 1.562500e-02 3.125000e-02 6.250000e-02 1.250000e-01 2.500000e-01 5.000000e-01 1.000000e+00 2.000000e+00 ) # np.logspace(-10, 1, 12, base=2)
+# export OPTIMIZER_NAME=AdamW
+# base_lrs=( 3.05175781e-05 6.10351562e-05 1.22070312e-04 2.44140625e-04 4.88281250e-04 9.76562500e-04 1.95312500e-03 3.90625000e-03 7.81250000e-03 1.56250000e-02 3.12500000e-02) # np.logspace(-15, -5, 11, base=2)
 export LR="${base_lrs[$SLURM_ARRAY_TASK_ID]}"
 export EPS=1e-12
 export BACKEND_STEPS=5
@@ -108,7 +110,7 @@ export MAX_NORM=-1
 
 # batch
 export SEQ_LEN=4096
-export BATCH_SIZE=2 # 16 / 4 / 2
+export BATCH_SIZE=32 # 32 / 16 / 8 / 4 / 2
 export GLOBAL_BATCH_SIZE=256
 
 # schedule
@@ -122,9 +124,9 @@ export LR_MIN=0.0
 export CHECKPOINT_INTERVAL=1024
 
 # wandb
-exp_name=norm-check-v2-"$OPTIMIZER_NAME"
+exp_name=norm-check-llama-"$OPTIMIZER_NAME"-v1
 # run_name=test-"$SLURM_JOB_ID"
-run_name=width-"$model_kind"-lr-"$SLURM_ARRAY_TASK_ID"
+run_name=width-"$model_kind"-lr-"$SLURM_ARRAY_TASK_ID"-16layers
 
 # logging
 export LOG_FREQ=1

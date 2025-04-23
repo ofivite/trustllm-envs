@@ -76,7 +76,6 @@ python -u -m torchrun_jsc \
        --lr_scheduler.lr_min="$LR_MIN" \
        --model.name="$MODEL_NAME" \
        --model.flavor="$MODEL_FLAVOR" \
-       --model.init_std="$INIT_STD" \
        --model.norm_type="$NORM_TYPE" \
        --model.tokenizer_path="$TOKENIZER_MODEL_FILE" \
        --training.seed="$SEED" \
