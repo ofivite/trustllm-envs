@@ -69,10 +69,10 @@ scratch_dir="$base_scratch_dir"/"$env_name"
 venv_dir="$scratch_dir"/env_"$(uname -m)"
 
 # Where to store preprocessed datasets.
-data_dir="$scratch_dir"/data
+data_dir=/p/data1/trustllmd/"$USER"/data
 
 # Where to store model checkpoints.
-checkpoint_dir="$scratch_dir"/experiments
+checkpoint_dir=/p/data1/trustllmd/"$USER"/experiments/trustllm
 
 # Which container to build.
 docker_image_uri='docker://nvcr.io/nvidia/pytorch:24.12-py3'
@@ -120,7 +120,8 @@ forked_repo_uris=(
 # This directory
 
 # Container script used for training runs.
-training_script="$(get_curr_dir)"/container-scripts/run_training_container.sh
+training_script="$(get_curr_dir)"/container-scripts/run_training_dev.sh
+# training_script="$(get_curr_dir)"/container-scripts/run_training_1B.sh
 
 # Container script used for experimental training runs.
 experimental_training_script="$(get_curr_dir)"/container-scripts/run_experimental_training_container.sh

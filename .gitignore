@@ -1,6 +1,7 @@
 # Slurm logs
 *.out
 *.err
+core.*
 
 # Archives
 *.tar

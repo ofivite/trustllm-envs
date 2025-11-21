@@ -26,11 +26,11 @@ source "$(get_curr_dir)"/global-scripts/load_machine.sh "$machine_name"
 
 # Directory where the environment's permanent files will be set up
 # (e.g. code or included repositories).
-base_project_dir="$root_project_dir"/"$project_name"/"$USER"
+base_project_dir="$root_project_dir"/"$project_name"/"$USER"/trustllm
 
 # Directory where the environment's non-permanent files (e.g. Python
 # `venv`, container, ...) will be set up.
-base_scratch_dir="$root_scratch_dir"/"$project_name"/"$USER"
+base_scratch_dir="$root_scratch_dir"/"$project_name"/"$USER"/trustllm
 # Where cache files are stored.
 cache_dir="$base_scratch_dir"/.cache
 
